@@ -1,0 +1,6 @@
+#include <stdio.h>
+#include <conico.h>
+
+void main() {
+    printf("1,2,3,4,5");
+}
