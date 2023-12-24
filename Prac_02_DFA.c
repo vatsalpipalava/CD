@@ -1,54 +1,68 @@
 #include <stdio.h>
-int main()
-{
-    int dfa = 0;
-    char input[50];
-    printf("Enter string : ");
-    scanf("%s", input);
 
-    for (int i = 0; input[i] != '\0'; i++)
-    {
-        if (dfa == 0 && input[i] == 'a')
-        {
+int main() {
+    int dfa = 0, pos = 0;
+    int length;
+    char str[100];  // Static memory allocation with a maximum length of 100 characters
+
+    printf("Enter the length you are entering: ");
+    scanf("%d", &length);
+
+    if (length > 100) {
+        printf("Input length exceeds the maximum allowed length.\n");
+        return 1;
+    }
+
+    printf("Enter the string: ");
+    scanf("%s", str);
+    printf("The string is %s\n", str);
+
+    while (pos < length) {
+        if (dfa == 0 && str[pos] == 'a') {
             dfa = 1;
-            printf("%c --> %d\n", input[i], dfa);
-        }
-        else if (dfa == 0 && input[i] == 'b')
-        {
+            printf("The character %c\n", str[pos]);
+            printf("The state %d\n", dfa);
+            printf("The pos %d\n", pos);
+            pos++;
+        } else if (dfa == 0 && str[pos] == 'b') {
             dfa = 3;
-            // printf("String Dose not match with RE..\n");
-            // return 0;
-        }
-        else if (dfa == 1 && input[i] == 'b')
-        {
-            dfa = 1;
-            printf("%c --> %d\n", input[i], dfa);
-        }
-        else if (dfa == 1 && input[i] == 'a')
-        {
+            printf("The character %c\n", str[pos]);
+            printf("The state %d\n", dfa);
+            printf("The pos %d\n", pos);
+            pos++;
+        } else if (dfa == 1 && str[pos] == 'b') {
+            printf("The character %c\n", str[pos]);
+            printf("The state %d\n", dfa);
+            printf("The pos %d\n", pos);
+            pos++;
+        } else if (dfa == 1 && str[pos] == 'a') {
             dfa = 2;
-            // printf("%c\n", input[i]);             //printf("%d\n", dfa);
-            printf("%c --> %d\n", input[i], dfa);
-        }
-        else if (dfa == 2 && input[i] == 'b')
-        {
+            printf("The character %c\n", str[pos]);
+            printf("The state %d\n", dfa);
+            printf("The pos %d\n", pos);
+            pos++;
+        } else if (dfa == 2 && (str[pos] == 'a' || str[pos] == 'b')) {
             dfa = 3;
-            // printf("String Dose not match with RE..\n");             // return 0;
+            printf("The character %c\n", str[pos]);
+            printf("The state %d\n", dfa);
+            printf("The pos %d\n", pos);
+            pos++;
+            break;
+        } else {
+
+            break;
+
         }
-        else if (dfa == 2 && input[i] == 'a')
-        {
-            dfa = 3;
-            // printf("String Dose not match with RE..\n");
-            // return 0;
-        }
     }
-    if (dfa != 2)
-    {
-        printf("string not accepted..\n");
+
+    if (dfa == 2 && pos == length) {
+
+        printf("The String matches the regular expression ab*a\n");
+
+    } else {
+
+        printf("The String doesn't match the regular expression ab*a\n");
     }
-    else
-    {
-        printf("string accepted..\n");
-    }
+
     return 0;
 }
