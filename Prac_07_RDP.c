@@ -1,75 +1,87 @@
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 
-char input[10];
-int i, error;
+#define SUCCESS 1
+#define FAILED 0
 
-void E();
-void T();
-void Eprime();
-void Tprime();
-void F();
+int E(), Edash();
+
+const char *cursor;
+char string[64];
 
 int main()
 {
-    printf("\nRecursive descent parsing for the following grammar\n");
-    printf("\nE -> E+T | T\nT -> T*F | F\nF -> (E) | id\n");
-    i = 0;
-    error = 0;
-    printf("\nEnter an arithmetic expression: "); // Eg: a+a*a gets(input);     scanf("%s", input);     E();
-    if (strlen(input) == i && error == 0)
-        printf("\nParsing Successful..!!!\n");
+    printf("Enter a String : ");
+    scanf("%s", string);
+
+    cursor = string;
+    puts("");
+    puts("Start Action");
+    puts("----------------------");
+
+    if (E() && *cursor == '\0')
+    {
+        puts("--------------------------------------------");
+        printf("String SUCCESSFULLY Parsed");
+        return 0;
+    }
     else
-        printf("\nError..!!!\n");
-    return 0;
-}
-
-void E()
-{
-    T();
-    Eprime();
-}
-
-void Eprime()
-{
-    if (input[i] == '+')
     {
-        i++;
-        T();
-        Eprime();
+        puts("--------------------------------------------");
+        printf("String Parsing FAILED");
+        return 1;
     }
 }
 
-void T()
+// Grammer Rule : E -> iE'
+int E()
 {
-    F();
-    Tprime();
-}
-
-void Tprime()
-{
-    if (input[i] == '*')
+    if (*cursor == 'i')
     {
-        i++;
-        F();
-        Tprime();
-    }
-}
-
-void F()
-{
-    if (isalnum(input[i]))
-        i++;
-    else if (input[i] == '(')
-    {
-        i++;
-        E();
-        if (input[i] == ')')
-            i++;
+        printf("%-16s E -> iE'\n", cursor);
+        cursor++;
+        if (Edash())
+        {
+            return SUCCESS;
+        }
         else
-            error = 1;
+        {
+            return FAILED;
+        }
     }
     else
-        error = 1;
+    {
+        return FAILED;
+    }
+}
+
+// Grammer Rule : E' -> +iE' | $
+int Edash()
+{
+    if (*cursor == '+')
+    {
+        cursor++;
+        if (*cursor == 'i')
+        {
+            printf("%-16s E' -> +iE'\n", cursor);
+            cursor++;
+            if (Edash())
+            {
+                return SUCCESS;
+            }
+            else
+            {
+                return FAILED;
+            }
+        }
+        else
+        {
+            return FAILED;
+        }
+    }
+    else
+    {
+        printf("%-16s E' -> $\n", cursor);
+        return SUCCESS;
+    }
 }
